@@ -1,0 +1,12 @@
+working_dir: /Users/collinsorighose/corighose/ansible/working
+
+service_list:
+- httpd
+- nfs
+- mariadb
+
+shared_paths: 
+  nfs: /mnt/nfs
+  cifs: /mnt/citfs
+  iscsi: /mnt/iscsi
+

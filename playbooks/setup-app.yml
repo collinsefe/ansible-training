@@ -1,0 +1,47 @@
+# setup-app.yml
+
+---
+  - hosts: webservers
+    become: true
+
+    vars:
+      path_to_app: "/var/www/html"
+    tasks:
+      - name: upload application file
+        copy:
+          src: ../index.php
+          dest: "{{ path_to_app }}"
+          mode: 0755
+        tags: upload
+
+      - name: create simple info page 
+        copy:
+          dest: "{{ path_to_app }}/info.php"
+          content: "<h1> This is my ip address Collins {{ ansible_hostname }}, These are new changes </h1>"
+        tags: create
+        args:
+          warn: no
+        #change_when: false
+
+      - name: see folder contents
+        command: ls -la {{ path_to_app }}
+        register: dir_contents
+        
+      - name: debug directory contents
+        debug:
+          msg: "{{ dir_contents }}"
+        tags: debug   
+
+      - name: configure PHP.ini file
+        lineinfile:
+          path: /etc/php.ini
+          regexp: ^short_open_tag
+          line: 'short_open_tag=On'
+        notify: restart apache 
+
+    handlers:     
+      - name: restart apache 
+        service: name=httpd state=restarted
+
+      
+  

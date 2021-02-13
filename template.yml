@@ -1,0 +1,15 @@
+---
+  - hosts: localhost
+    gather_facts: no
+    become: yes
+
+    vars:
+      code_name: whiskey
+      version: 4.2
+
+    tasks:
+      - name: deploy config file
+        template:
+          src: config.j2
+          dest: /opt/config
+  

@@ -1,0 +1,30 @@
+---
+  - hosts: all
+    vars: 
+      instance_ids:
+        - 'i-00cac6aa64dbc0471'
+        - 'i-0e93462f14367c433'
+        - 'i-0187ba183cdccf4ea'
+      region: eu-west-2
+      profile: rcsecurity
+
+    tasks:
+      - name: start ansible sandbox instances
+        ec2:
+          instance_ids: '{{ instance_ids }}'
+          region: '{{ region }}'
+          profile: '{{ profile }}'
+          state: running
+          wait: True 
+        tags:
+          - start 
+        
+      - name: stop ansible sandbox instances 
+        ec2:
+          instance_ids: '{{ instance_ids }}'
+          region: '{{ region }}'
+          profile: '{{ profile }}'
+          state: stopped
+          wait: True 
+        tags:
+          - stop
